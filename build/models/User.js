@@ -31,6 +31,12 @@ let UserSchema = new mongoose_1.Schema({
         default: '',
         required: true,
         unique: true
+    },
+    pan: {
+        type: String,
+        default: '',
+        required: true,
+        unique: true
     }
 });
 exports.default = mongoose_1.model('User', UserSchema);

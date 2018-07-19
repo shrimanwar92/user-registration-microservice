@@ -17,8 +17,8 @@ class UserRouter {
         });
     }
     GetUser(req, res) {
-        const username = req.params.username;
-        User_1.default.findOne({ username })
+        const aadhar = req.params.aadhar;
+        User_1.default.findOne({ aadhar })
             .then(data => {
             const status = res.statusCode;
             res.json({ status, data });
@@ -28,15 +28,19 @@ class UserRouter {
         });
     }
     CreateUser(req, res) {
-        const name = req.body.name;
-        const username = req.body.username;
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
         const email = req.body.email;
-        const password = req.body.password;
+        const mobile = req.body.mobile;
+        const aadhar = req.body.aadhar;
+        const pan = req.body.pan;
         const user = new User_1.default({
-            name,
-            username,
+            firstName,
+            lastName,
             email,
-            password
+            mobile,
+            aadhar,
+            pan
         });
         user.save().then(data => {
             const status = res.statusCode;
@@ -47,8 +51,8 @@ class UserRouter {
         });
     }
     UpdateUser(req, res) {
-        const username = req.params.username;
-        User_1.default.findOneAndUpdate({ username }, req.body).then(data => {
+        const aadhar = req.params.aadhar;
+        User_1.default.findOneAndUpdate({ aadhar }, req.body).then(data => {
             const status = res.statusCode;
             res.json({ status, data });
         }).catch(err => {
@@ -57,8 +61,8 @@ class UserRouter {
         });
     }
     DeleteUser(req, res) {
-        const username = req.params.username;
-        User_1.default.findOneAndRemove({ username }).then(data => {
+        const aadhar = req.params.aadhar;
+        User_1.default.findOneAndRemove({ aadhar }).then(data => {
             const status = res.statusCode;
             res.json({ status, data });
         }).catch(err => {
@@ -68,10 +72,10 @@ class UserRouter {
     }
     routes() {
         this.router.get('/', this.GetUsers);
-        this.router.get('/:username', this.GetUser);
+        this.router.get('/:aadhar', this.GetUser);
         this.router.post('/', this.CreateUser);
-        this.router.put('/:username', this.UpdateUser);
-        this.router.delete('/:username', this.DeleteUser);
+        this.router.put('/:aadhar', this.UpdateUser);
+        this.router.delete('/:aadhar', this.DeleteUser);
     }
 }
 // export

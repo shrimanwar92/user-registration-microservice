@@ -30,6 +30,12 @@ let UserSchema: Schema = new Schema({
 		default: '',
 		required: true,
 		unique: true
+	},
+	pan: {
+		type: String,
+		default: '',
+		required: true,
+		unique: true
 	}
 });
 

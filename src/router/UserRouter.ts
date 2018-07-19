@@ -20,9 +20,9 @@ class UserRouter {
 	}
 
 	GetUser(req: Request, res: Response): void {
-		const username: string = req.params.username;
+		const aadhar: string = req.params.aadhar;
 
-		User.findOne({ username })
+		User.findOne({ aadhar })
 		.then(data => {
 			const status = res.statusCode;
 			res.json({ status, data });
@@ -33,16 +33,20 @@ class UserRouter {
 	}
 
 	CreateUser(req: Request, res: Response): void {
-		const name: string = req.body.name;
-		const username: string = req.body.username;
+		const firstName: string = req.body.firstName;
+		const lastName: string = req.body.lastName;
 		const email: string = req.body.email;
-		const password: string = req.body.password;
+		const mobile: string = req.body.mobile;
+		const aadhar: string = req.body.aadhar;
+		const pan: string = req.body.pan;
 
 		const user = new User({
-			name,
-			username,
+			firstName,
+			lastName,
 			email,
-			password
+			mobile,
+			aadhar,
+			pan
 		});
 
 		user.save().then(data => {
@@ -55,9 +59,9 @@ class UserRouter {
 	}
 
 	UpdateUser(req: Request, res: Response): void {
-		const username: string = req.params.username;
+		const aadhar: string = req.params.aadhar;
 
-		User.findOneAndUpdate({ username }, req.body).then(data => {
+		User.findOneAndUpdate({ aadhar }, req.body).then(data => {
 			const status = res.statusCode;
 			res.json({ status, data });
 		}).catch(err => {
@@ -67,9 +71,9 @@ class UserRouter {
 	}
 
 	DeleteUser(req: Request, res: Response): void {
-		const username: string = req.params.username;
+		const aadhar: string = req.params.aadhar;
 
-		User.findOneAndRemove({ username }).then(data => {
+		User.findOneAndRemove({ aadhar }).then(data => {
 			const status = res.statusCode;
 			res.json({ status, data });
 		}).catch(err => {
@@ -80,10 +84,10 @@ class UserRouter {
 
 	routes() {
 		this.router.get('/', this.GetUsers);
-		this.router.get('/:username', this.GetUser);
+		this.router.get('/:aadhar', this.GetUser);
 		this.router.post('/', this.CreateUser);
-		this.router.put('/:username', this.UpdateUser);
-		this.router.delete('/:username', this.DeleteUser);
+		this.router.put('/:aadhar', this.UpdateUser);
+		this.router.delete('/:aadhar', this.DeleteUser);
 	}
 }
 
