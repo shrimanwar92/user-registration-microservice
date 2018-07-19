@@ -8,6 +8,7 @@ import * as helmet from 'helmet';
 
 // import routes
 import UserRouter from './router/UserRouter';
+import EntityRouter from './router/EntityRouter';
 
 // server class
 class Server {
@@ -39,6 +40,7 @@ class Server {
 
 		this.app.use('/', router);
 		this.app.use('/api/v1/users', UserRouter);
+		this.app.use('/api/v1/entity', EntityRouter);
 	}
 }
 

@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import User from '../models/User';
+import transporter from '../../lib/emailService'
 
 class UserRouter {
 	router: Router;
@@ -39,6 +40,7 @@ class UserRouter {
 		const mobile: string = req.body.mobile;
 		const aadhar: string = req.body.aadhar;
 		const pan: string = req.body.pan;
+		const isConsented: boolean = req.body.isConsented;
 
 		const user = new User({
 			firstName,
@@ -46,7 +48,8 @@ class UserRouter {
 			email,
 			mobile,
 			aadhar,
-			pan
+			pan,
+			isConsented
 		});
 
 		user.save().then(data => {
@@ -82,12 +85,30 @@ class UserRouter {
 		})
 	}
 
+	sendMail(req: Request, res: Response) {
+		let mailOptions = {
+            from: '"Fred Foo 👻" <foo@example.com>', // sender address
+            to: 'bar@example.com, baz@example.com', // list of receivers
+            subject: 'Hello ✔', // Subject line
+            text: 'Hello world?', // plain text body
+            html: '<b>Hello world?</b>' // html body
+        };
+		transporter.sendMail(mailOptions, function(error, info) {
+		    if (error) {
+		        res.json({error});
+		    } else {
+		        res.json({info});
+		    }
+		});
+	}
+
 	routes() {
 		this.router.get('/', this.GetUsers);
 		this.router.get('/:aadhar', this.GetUser);
 		this.router.post('/', this.CreateUser);
 		this.router.put('/:aadhar', this.UpdateUser);
 		this.router.delete('/:aadhar', this.DeleteUser);
+		this.router.get('/sendMail', this.sendMail);
 	}
 }
 

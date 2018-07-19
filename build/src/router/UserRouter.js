@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const User_1 = require("../models/User");
-const send = require("../../lib/test.js");
+const emailService_1 = require("../../lib/emailService");
 class UserRouter {
     constructor() {
         this.router = express_1.Router();
@@ -74,9 +74,20 @@ class UserRouter {
         });
     }
     sendMail(req, res) {
-        console.log('sadasd');
-        send().then(info => {
-            res.json({ info });
+        let mailOptions = {
+            from: '"Fred Foo 👻" <foo@example.com>',
+            to: 'bar@example.com, baz@example.com',
+            subject: 'Hello ✔',
+            text: 'Hello world?',
+            html: '<b>Hello world?</b>' // html body
+        };
+        emailService_1.default.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                res.json({ error });
+            }
+            else {
+                res.json({ info });
+            }
         });
     }
     routes() {

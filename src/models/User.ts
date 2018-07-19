@@ -36,6 +36,11 @@ let UserSchema: Schema = new Schema({
 		default: '',
 		required: true,
 		unique: true
+	},
+	isConsented: {
+		type: Boolean,
+		default: false,
+		required: true
 	}
 });
 
