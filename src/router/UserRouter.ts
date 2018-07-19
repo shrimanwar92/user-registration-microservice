@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import User from '../models/User';
-import transporter from '../../lib/emailService'
+import EailService from '../../lib/emailService'
 
 class UserRouter {
 	router: Router;
@@ -11,9 +11,14 @@ class UserRouter {
 	}
 
 	GetUsers(req: Request, res: Response): void {
+		console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
 		User.find({}).then(data => {
-			const status = res.statusCode;
-			res.json({ status, data });
+			let es = new EailService();
+		es.sendMail('shrimanwar92@gmail.com','Hello','Hello from gmailService').then(msg => {
+			res.json({ msg });
+		});
+			//const status = res.statusCode;
+			//res.json({ status, data });
 		}).catch(err => {
 			const status = res.statusCode;
 			res.json({ status, err });
@@ -85,30 +90,24 @@ class UserRouter {
 		})
 	}
 
-	sendMail(req: Request, res: Response) {
-		let mailOptions = {
-            from: '"Fred Foo 👻" <foo@example.com>', // sender address
-            to: 'bar@example.com, baz@example.com', // list of receivers
-            subject: 'Hello ✔', // Subject line
-            text: 'Hello world?', // plain text body
-            html: '<b>Hello world?</b>' // html body
-        };
-		transporter.sendMail(mailOptions, function(error, info) {
-		    if (error) {
-		        res.json({error});
-		    } else {
-		        res.json({info});
-		    }
+	sendMail(req: Request, res: Response): void {
+
+		console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
+
+		let es = new EailService();
+		es.sendMail('<test_user>@gmail.com','Hello','Hello from gmailService').then(msg => {
+			const status = res.statusCode;
+			res.json({ status, msg });
 		});
 	}
 
 	routes() {
 		this.router.get('/', this.GetUsers);
 		this.router.get('/:aadhar', this.GetUser);
+		this.router.get('/mail', this.sendMail);
 		this.router.post('/', this.CreateUser);
 		this.router.put('/:aadhar', this.UpdateUser);
 		this.router.delete('/:aadhar', this.DeleteUser);
-		this.router.get('/sendMail', this.sendMail);
 	}
 }
 

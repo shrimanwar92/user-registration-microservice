@@ -9,9 +9,14 @@ class UserRouter {
         this.routes();
     }
     GetUsers(req, res) {
+        console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
         User_1.default.find({}).then(data => {
-            const status = res.statusCode;
-            res.json({ status, data });
+            let es = new emailService_1.default();
+            es.sendMail('shrimanwar92@gmail.com', 'Hello', 'Hello from gmailService').then(msg => {
+                res.json({ msg });
+            });
+            //const status = res.statusCode;
+            //res.json({ status, data });
         }).catch(err => {
             const status = res.statusCode;
             res.json({ status, err });
@@ -74,29 +79,20 @@ class UserRouter {
         });
     }
     sendMail(req, res) {
-        let mailOptions = {
-            from: '"Fred Foo 👻" <foo@example.com>',
-            to: 'bar@example.com, baz@example.com',
-            subject: 'Hello ✔',
-            text: 'Hello world?',
-            html: '<b>Hello world?</b>' // html body
-        };
-        emailService_1.default.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                res.json({ error });
-            }
-            else {
-                res.json({ info });
-            }
+        console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
+        let es = new emailService_1.default();
+        es.sendMail('<test_user>@gmail.com', 'Hello', 'Hello from gmailService').then(msg => {
+            const status = res.statusCode;
+            res.json({ status, msg });
         });
     }
     routes() {
         this.router.get('/', this.GetUsers);
         this.router.get('/:aadhar', this.GetUser);
+        this.router.get('/mail', this.sendMail);
         this.router.post('/', this.CreateUser);
         this.router.put('/:aadhar', this.UpdateUser);
         this.router.delete('/:aadhar', this.DeleteUser);
-        this.router.get('/sendMail', this.sendMail);
     }
 }
 // export
