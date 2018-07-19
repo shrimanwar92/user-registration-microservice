@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import User from '../models/User';
-import EailService from '../../lib/emailService'
+import EailService from '../../lib/emailService';
 
 class UserRouter {
 	router: Router;
@@ -95,16 +95,16 @@ class UserRouter {
 		console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
 
 		let es = new EailService();
-		es.sendMail('<test_user>@gmail.com','Hello','Hello from gmailService').then(msg => {
+		es.sendMail('test@gmail.com','Hello','Hello from gmailService').then(msg => {
 			const status = res.statusCode;
 			res.json({ status, msg });
 		});
 	}
 
 	routes() {
-		this.router.get('/', this.GetUsers);
+		// this.router.get('/', this.GetUsers);
 		this.router.get('/:aadhar', this.GetUser);
-		this.router.get('/mail', this.sendMail);
+		this.router.get('/', this.sendMail);
 		this.router.post('/', this.CreateUser);
 		this.router.put('/:aadhar', this.UpdateUser);
 		this.router.delete('/:aadhar', this.DeleteUser);

@@ -1,8 +1,11 @@
 import * as nodemailer from 'nodemailer';
-import {EmailTemplate} from 'email-templates';
+import * as fs from "fs";
+import * as path from 'path';
 
 export default class EailService {
 	private _transporter: nodemailer.Transporter;
+	template = fs.readFileSync(path.resolve(__dirname, "./index.html"), {encoding:'utf-8'});
+
 	mailConfig = {
 	  host: 'smtp.ethereal.email',
 	  port: 587,
@@ -21,7 +24,8 @@ export default class EailService {
 			from: 'from_test@gmail.com',
 			to: to,
 			subject: subject,
-			text: content
+			text: content,
+			html: this.template
 		}
 
 		try {

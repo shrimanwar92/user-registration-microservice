@@ -9,8 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer = require("nodemailer");
+const fs = require("fs");
+const path = require("path");
 class EailService {
     constructor() {
+        this.template = fs.readFileSync(path.resolve(__dirname, "./index.html"), { encoding: 'utf-8' });
         this.mailConfig = {
             host: 'smtp.ethereal.email',
             port: 587,
@@ -27,7 +30,8 @@ class EailService {
                 from: 'from_test@gmail.com',
                 to: to,
                 subject: subject,
-                text: content
+                text: content,
+                html: this.template
             };
             try {
                 return yield this._transporter.sendMail(options);
