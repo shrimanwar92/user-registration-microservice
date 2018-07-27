@@ -27,6 +27,7 @@ class Server {
         this.app.use(logger('dev'));
         this.app.use(compression());
         this.app.use(helmet());
+        this.app.set('view engine', 'ejs');
         // this.app.use(cors());
     }
     routes() {
