@@ -19,6 +19,11 @@ let UserSchema: Schema = new Schema({
 		required: true,
 		unique: true
 	},
+	password: {
+		type: String,
+		default: '',
+		required: true
+	},
 	mobile: {
 		type: String,
 		default: '',
@@ -39,8 +44,14 @@ let UserSchema: Schema = new Schema({
 	},
 	isConsented: {
 		type: Boolean,
-		default: false,
-		required: true
+		default: false
+	},
+	isVerified: {
+		type: Boolean,
+		default: false
+	},
+	gender: {
+		type: String
 	}
 });
 

@@ -4,7 +4,7 @@ import * as bodyParser from 'body-parser';
 import * as compression from'compression';
 import * as logger from 'morgan';
 import * as helmet from 'helmet';
-// import * as cors from 'cors';
+import * as cors from 'cors';
 
 // import routes
 import UserRouter from './router/UserRouter';
@@ -33,7 +33,7 @@ class Server {
 		this.app.use(compression());
 		this.app.use(helmet());
 		this.app.set('view engine', 'ejs');
-		// this.app.use(cors());
+		this.app.use(cors());
 	}
 
 	routes(): void {

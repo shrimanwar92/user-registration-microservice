@@ -20,6 +20,11 @@ let UserSchema = new mongoose_1.Schema({
         required: true,
         unique: true
     },
+    password: {
+        type: String,
+        default: '',
+        required: true
+    },
     mobile: {
         type: String,
         default: '',
@@ -40,8 +45,14 @@ let UserSchema = new mongoose_1.Schema({
     },
     isConsented: {
         type: Boolean,
-        default: false,
-        required: true
+        default: false
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    gender: {
+        type: String
     }
 });
 exports.default = mongoose_1.model('User', UserSchema);

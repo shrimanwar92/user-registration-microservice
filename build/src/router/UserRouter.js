@@ -3,28 +3,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const User_1 = require("../models/User");
 const emailService_1 = require("../../lib/emailService");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 class UserRouter {
     constructor() {
         this.router = express_1.Router();
         this.routes();
     }
     GetUsers(req, res) {
-        console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
         User_1.default.find({}).then(data => {
-            let es = new emailService_1.default();
-            es.sendMail('shrimanwar92@gmail.com', 'Hello', 'Hello from gmailService').then(msg => {
-                res.json({ msg });
-            });
-            //const status = res.statusCode;
-            //res.json({ status, data });
+            const status = res.statusCode;
+            res.json({ status, data });
         }).catch(err => {
             const status = res.statusCode;
             res.json({ status, err });
         });
     }
     GetUser(req, res) {
-        const aadhar = req.params.aadhar;
-        User_1.default.findOne({ aadhar })
+        const id = req.params.id;
+        User_1.default.findOne({ id })
             .then(data => {
             const status = res.statusCode;
             res.json({ status, data });
@@ -37,18 +34,24 @@ class UserRouter {
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
         const email = req.body.email;
+        const password = bcrypt.hashSync(req.body.password, 8);
         const mobile = req.body.mobile;
         const aadhar = req.body.aadhar;
         const pan = req.body.pan;
         const isConsented = req.body.isConsented;
+        const isVerified = false;
+        const gender = req.body.gender;
         const user = new User_1.default({
             firstName,
             lastName,
             email,
+            password,
             mobile,
             aadhar,
             pan,
-            isConsented
+            isConsented,
+            isVerified,
+            gender
         });
         user.save().then(data => {
             const status = res.statusCode;
@@ -59,8 +62,8 @@ class UserRouter {
         });
     }
     UpdateUser(req, res) {
-        const aadhar = req.params.aadhar;
-        User_1.default.findOneAndUpdate({ aadhar }, req.body).then(data => {
+        const id = req.params.id;
+        User_1.default.findOneAndUpdate({ id }, req.body).then(data => {
             const status = res.statusCode;
             res.json({ status, data });
         }).catch(err => {
@@ -69,10 +72,34 @@ class UserRouter {
         });
     }
     DeleteUser(req, res) {
-        const aadhar = req.params.aadhar;
-        User_1.default.findOneAndRemove({ aadhar }).then(data => {
+        const id = req.params.id;
+        User_1.default.findOneAndRemove({ id }).then(data => {
             const status = res.statusCode;
             res.json({ status, data });
+        }).catch(err => {
+            const status = res.statusCode;
+            res.json({ status, err });
+        });
+    }
+    LoginUser(req, res) {
+        const email = req.body.email;
+        const password = req.body.password;
+        User_1.default.findOne({ email })
+            .then(data => {
+            let hash = data['password'];
+            if (bcrypt.compareSync(password, hash)) {
+                // create a token
+                const token = jwt.sign({ id: data._id }, "mylittlesecret", {
+                    expiresIn: 86400 // expires in 24 hours
+                });
+                const status = res.statusCode;
+                res.json({ status, auth: true, token: token });
+            }
+            else {
+                const status = 0;
+                const err = 'Incorrect password';
+                res.json({ status, err });
+            }
         }).catch(err => {
             const status = res.statusCode;
             res.json({ status, err });
@@ -87,12 +114,13 @@ class UserRouter {
         });
     }
     routes() {
-        // this.router.get('/', this.GetUsers);
-        this.router.get('/:aadhar', this.GetUser);
-        this.router.get('/', this.sendMail);
+        this.router.get('/', this.GetUsers);
+        this.router.get('/:id', this.GetUser);
+        // this.router.get('/', this.sendMail);
         this.router.post('/', this.CreateUser);
-        this.router.put('/:aadhar', this.UpdateUser);
-        this.router.delete('/:aadhar', this.DeleteUser);
+        this.router.put('/:id', this.UpdateUser);
+        this.router.delete('/:id', this.DeleteUser);
+        this.router.route('/login').post(this.LoginUser);
     }
 }
 // export

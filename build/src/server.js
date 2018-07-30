@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const compression = require("compression");
 const logger = require("morgan");
 const helmet = require("helmet");
-// import * as cors from 'cors';
+const cors = require("cors");
 // import routes
 const UserRouter_1 = require("./router/UserRouter");
 const EntityRouter_1 = require("./router/EntityRouter");
@@ -28,7 +28,7 @@ class Server {
         this.app.use(compression());
         this.app.use(helmet());
         this.app.set('view engine', 'ejs');
-        // this.app.use(cors());
+        this.app.use(cors());
     }
     routes() {
         let router = express.Router();
