@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const axios_1 = require("axios");
+const Entity_1 = require("../models/Entity");
 class EntityRouter {
     constructor() {
         this.router = express_1.Router();
@@ -17,18 +17,44 @@ class EntityRouter {
     }
     GetEntity(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
             try {
-                const response = yield axios_1.default.get("https://jsonplaceholder.typicode.com/posts/1");
-                const data = response.data;
-                res.json({ data });
+                const entity = yield Entity_1.default.findOne({ _id: id });
+                const status = res.statusCode;
+                res.json({ status, entity });
             }
-            catch (error) {
-                console.log(error);
+            catch (err) {
+                const status = res.statusCode;
+                res.json({ status, err });
+            }
+        });
+    }
+    CreateEntity(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const entityType = req.body.entityType;
+            const entityName = req.body.entityName;
+            const uniqueIdentifier = req.body.uniqueIdentifier;
+            const address = req.body.address;
+            const entity = new Entity_1.default({
+                entityType,
+                entityName,
+                uniqueIdentifier,
+                address
+            });
+            try {
+                const ent = yield entity.save();
+                const status = res.statusCode;
+                res.json({ status, ent });
+            }
+            catch (err) {
+                const status = res.statusCode;
+                res.json({ status, err });
             }
         });
     }
     routes() {
-        this.router.get('/', this.GetEntity);
+        this.router.get('/:id', this.GetEntity);
+        this.router.post('/', this.CreateEntity);
     }
 }
 // export

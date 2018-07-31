@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const User_1 = require("../models/User");
-const emailService_1 = require("../../lib/emailService");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 class UserRouter {
@@ -21,7 +20,7 @@ class UserRouter {
     }
     GetUser(req, res) {
         const id = req.params.id;
-        User_1.default.findOne({ id })
+        User_1.default.findOne({ _id: id })
             .then(data => {
             const status = res.statusCode;
             res.json({ status, data });
@@ -105,14 +104,16 @@ class UserRouter {
             res.json({ status, err });
         });
     }
-    sendMail(req, res) {
+    /*sendMail(req: Request, res: Response): void {
+
         console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
-        let es = new emailService_1.default();
-        es.sendMail('test@gmail.com', 'Hello', 'Hello from gmailService').then(msg => {
+
+        let es = new EailService();
+        es.sendMail('test@gmail.com','Hello','Hello from gmailService').then(msg => {
             const status = res.statusCode;
             res.json({ status, msg });
         });
-    }
+    }*/
     routes() {
         this.router.get('/', this.GetUsers);
         this.router.get('/:id', this.GetUser);

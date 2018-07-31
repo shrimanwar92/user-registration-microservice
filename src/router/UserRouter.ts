@@ -25,7 +25,7 @@ class UserRouter {
 	GetUser(req: Request, res: Response): void {
 		const id: string = req.params.id;
 
-		User.findOne({ id })
+		User.findOne({ _id: id })
 		.then(data => {
 			const status = res.statusCode;
 			res.json({ status, data });
@@ -118,7 +118,7 @@ class UserRouter {
 		});
 	}
 
-	sendMail(req: Request, res: Response): void {
+	/*sendMail(req: Request, res: Response): void {
 
 		console.log("QWIUEQWIUEYQIUWE >>>>>>>>>> IUWQGIUQGWIUEGQIUWE");
 
@@ -127,7 +127,7 @@ class UserRouter {
 			const status = res.statusCode;
 			res.json({ status, msg });
 		});
-	}
+	}*/
 
 	routes() {
 		this.router.get('/', this.GetUsers);
